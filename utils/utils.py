@@ -126,24 +126,33 @@ def random_crop(img, gt):
     ptr2 = ((max(gt[0][0], gt[1][0], gt[2][0], gt[3][0]),
              max(gt[0][1], gt[1][1], gt[2][1], gt[3][1])))
 
-    start_x = np.random.randint(0, int(max(ptr1[0] - 1, 1)))
-    start_y = np.random.randint(0, int(max(ptr1[1] - 1, 1)))
+    # start_x = np.random.randint(0, int(max(ptr1[0] - 1, 1)))
+    # start_y = np.random.randint(0, int(max(ptr1[1] - 1, 1)))
 
-    end_x = np.random.randint(int(min(ptr2[0] + 1, img.shape[1] - 1)), img.shape[1])
-    end_y = np.random.randint(int(min(ptr2[1] + 1, img.shape[0] - 1)), img.shape[0])
+    # end_x = np.random.randint(int(min(ptr2[0] + 1, img.shape[1] - 1)), img.shape[1])
+    # end_y = np.random.randint(int(min(ptr2[1] + 1, img.shape[0] - 1)), img.shape[0])
+
+
+    start_x = int(ptr1[0])
+    start_y = int(ptr1[1])
+    end_x = int(ptr2[0])
+    end_y = int(ptr2[1])
 
     img = img[start_y:end_y, start_x:end_x]
+    gt_top_bot = sorted(gt* (1.0 / img.shape[1], 1.0 / img.shape[0]), key=lambda point: point[1])
+    [tl, tr] = sorted(gt_top_bot[:2], key=lambda point: point[0]) 
+    [bl, br] = sorted(gt_top_bot[2:], key=lambda point: point[0])
 
-    myGt = gt - (start_x, start_y)
-    myGt = myGt * (1.0 / img.shape[1], 1.0 / img.shape[0])
+    # myGt = gt - (start_x, start_y)
+    # myGt = myGt * (1.0 / img.shape[1], 1.0 / img.shape[0])
 
-    myGtTemp = myGt * myGt
-    sum_array = myGtTemp.sum(axis=1)
-    tl_index = np.argmin(sum_array)
-    tl = myGt[tl_index]
-    tr = myGt[(tl_index + 1) % 4]
-    br = myGt[(tl_index + 2) % 4]
-    bl = myGt[(tl_index + 3) % 4]
+    # myGtTemp = myGt * myGt
+    # sum_array = myGtTemp.sum(axis=1)
+    # tl_index = np.argmin(sum_array)
+    # tl = myGt[tl_index]
+    # tr = myGt[(tl_index + 1) % 4]
+    # br = myGt[(tl_index + 2) % 4]
+    # bl = myGt[(tl_index + 3) % 4]
 
     return img, (tl, tr, br, bl)
 
@@ -151,16 +160,20 @@ def random_crop(img, gt):
 def get_corners(img, gt):
     gt = gt.astype(int)
     list_of_points = {}
-    myGt = gt
+    # myGt = gt
 
-    myGtTemp = myGt * myGt
-    sum_array = myGtTemp.sum(axis=1)
+    # myGtTemp = myGt * myGt
+    # sum_array = myGtTemp.sum(axis=1)
 
-    tl_index = np.argmin(sum_array)
-    tl = myGt[tl_index]
-    tr = myGt[(tl_index + 1) % 4]
-    br = myGt[(tl_index + 2) % 4]
-    bl = myGt[(tl_index + 3) % 4]
+    # tl_index = np.argmin(sum_array)
+    # tl = myGt[tl_index]
+    # tr = myGt[(tl_index + 1) % 4]
+    # br = myGt[(tl_index + 2) % 4]
+    # bl = myGt[(tl_index + 3) % 4]
+
+    gt_top_bot = sorted(gt, key=lambda point: point[1])
+    [tl, tr] = sorted(gt_top_bot[:2], key=lambda point: point[0]) 
+    [bl, br] = sorted(gt_top_bot[2:], key=lambda point: point[0])
 
     list_of_points["tr"] = tr
     list_of_points["tl"] = tl
@@ -285,12 +298,17 @@ def sort_gt(gt):
     :param gt: 
     :return: sorted gt
     '''
-    myGtTemp = gt * gt
-    sum_array = myGtTemp.sum(axis=1)
-    tl_index = np.argmin(sum_array)
-    tl = gt[tl_index]
-    tr = gt[(tl_index + 1) % 4]
-    br = gt[(tl_index + 2) % 4]
-    bl = gt[(tl_index + 3) % 4]
+    # gt = np.array(gt)
+    gt_top_bot = sorted(gt, key=lambda point: point[1])
+    [tl, tr] = sorted(gt_top_bot[:2], key=lambda point: point[0])
+    [bl, br] = sorted(gt_top_bot[2:], key=lambda point: point[0])
+
+    # myGtTemp = gt * gt
+    # sum_array = myGtTemp.sum(axis=1)
+    # tl_index = np.argmin(sum_array)
+    # tl = gt[tl_index]
+    # tr = gt[(tl_index + 1) % 4]
+    # br = gt[(tl_index + 2) % 4]
+    # bl = gt[(tl_index + 3) % 4]
 
     return np.asarray((tl, tr, br, bl))

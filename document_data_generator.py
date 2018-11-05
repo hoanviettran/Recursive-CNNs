@@ -52,20 +52,23 @@ if __name__ == '__main__':
 
                 for angle in range(0, 271, 90):
                     img_rotate, gt_rotate = utils.utils.rotate(img, corner_cords, angle)
-                    for random_crop in range(0, 16):
+                    for random_crop in range(0, 1):
                         counter += 1
                         f_name = str(counter).zfill(8)
+                        try:
+                            img_crop, gt_crop = utils.utils.random_crop(img_rotate, gt_rotate)
+                            mah_size = img_crop.shape
+                            img_crop = cv2.resize(img_crop, (64, 64))
+                            gt_crop = np.array(gt_crop)
 
-                        img_crop, gt_crop = utils.utils.random_crop(img_rotate, gt_rotate)
-                        mah_size = img_crop.shape
-                        img_crop = cv2.resize(img_crop, (64, 64))
-                        gt_crop = np.array(gt_crop)
+                            # no=0
+                            # for a in range(0,4):
+                            #     no+=1
+                            #     cv2.circle(img_crop, tuple(((gt_crop[a]*64).astype(int))), 2,(255-no*60,no*60,0),9)
+                            # # cv2.imwrite("asda.jpg", img)
 
-                        # no=0
-                        # for a in range(0,4):
-                        #     no+=1
-                        #     cv2.circle(img_crop, tuple(((gt_crop[a]*64).astype(int))), 2,(255-no*60,no*60,0),9)
-                        # # cv2.imwrite("asda.jpg", img)
-
-                        cv2.imwrite(os.path.join(args.output_dir, f_name+".jpg"), img_crop)
-                        spamwriter.writerow((f_name+".jpg", tuple(list(gt_crop))))
+                            cv2.imwrite(os.path.join(args.output_dir, f_name+".jpg"), img_crop)
+                            spamwriter.writerow((f_name+".jpg", tuple(list(gt_crop))))
+                        except:
+                            # print('fail')
+                            pass
