@@ -126,19 +126,20 @@ def random_crop(img, gt):
     ptr2 = ((max(gt[0][0], gt[1][0], gt[2][0], gt[3][0]),
              max(gt[0][1], gt[1][1], gt[2][1], gt[3][1])))
 
-    # start_x = np.random.randint(0, int(max(ptr1[0] - 1, 1)))
-    # start_y = np.random.randint(0, int(max(ptr1[1] - 1, 1)))
+    start_x = np.random.randint(0, int(max((ptr1[0] - 1)*3/4, 1)))
+    start_y = np.random.randint(0, int(max((ptr1[1] - 1)*3/4, 1)))
 
-    # end_x = np.random.randint(int(min(ptr2[0] + 1, img.shape[1] - 1)), img.shape[1])
-    # end_y = np.random.randint(int(min(ptr2[1] + 1, img.shape[0] - 1)), img.shape[0])
+    end_x = np.random.randint(int(min(ptr2[0] + 1, img.shape[1] - 1)), img.shape[1])
+    end_y = np.random.randint(int(min(ptr2[1] + 1, img.shape[0] - 1)), img.shape[0])
 
 
-    start_x = int(ptr1[0])
-    start_y = int(ptr1[1])
-    end_x = int(ptr2[0])
-    end_y = int(ptr2[1])
+    # start_x = int(ptr1[0])
+    # start_y = int(ptr1[1])
+    # end_x = int(ptr2[0])
+    # end_y = int(ptr2[1])
 
     img = img[start_y:end_y, start_x:end_x]
+    gt = gt - (start_x, start_y)
     gt_top_bot = sorted(gt* (1.0 / img.shape[1], 1.0 / img.shape[0]), key=lambda point: point[1])
     [tl, tr] = sorted(gt_top_bot[:2], key=lambda point: point[0]) 
     [bl, br] = sorted(gt_top_bot[2:], key=lambda point: point[0])
