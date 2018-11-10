@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
                 for angle in range(0, 271, 90):
                     img_rotate, gt_rotate = utils.utils.rotate(img, corner_cords, angle)
-                    for random_crop in range(0, 1):
+                    for random_crop in range(0, 4):
                         counter += 1
                         f_name = str(counter).zfill(8)
                         try:
@@ -70,5 +70,5 @@ if __name__ == '__main__':
                             cv2.imwrite(os.path.join(args.output_dir, f_name+".jpg"), img_crop)
                             spamwriter.writerow((f_name+".jpg", tuple(list(gt_crop))))
                         except:
-                            # print('fail')
-                            pass
+                            print('fail')
+                            

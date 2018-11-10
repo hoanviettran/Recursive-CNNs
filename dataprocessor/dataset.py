@@ -153,50 +153,50 @@ class SelfCollectedDataset(Dataset):
                     body = json.load(f)
                     gt = []
                     points = body['shapes'][0]['points']
-                    # for point in points:
-                    #     gt.append(point)
-                    #main
-                    INTER_MARGIN_RATIO = 0.2
-                    EXTER_INTER_RATIO = 1
-                    img = cv2.imread(img_path)
-                    # Calculate shape of the bounding box of card
-                    x,y,w,h = cv2.boundingRect(np.array(points))
-                    inter_margins = INTER_MARGIN_RATIO * np.array([w,h])
-
-                    # Shape of image
-                    x_max = img.shape[1]
-                    y_max = img.shape[0]
-
-                    # create a array of x,y
-                    points_x = []
-                    points_y = []
                     for point in points:
-                        #point[0] ~ x, point[1] ~ y
-                        points_x.append(point[0])
-                        points_y.append(point[1])
-                    points_x = np.array(points_x)
-                    points_y = np.array(points_y)
+                        gt.append(point)
+                    # #main
+                    # INTER_MARGIN_RATIO = 0.2
+                    # EXTER_INTER_RATIO = 1
+                    # img = cv2.imread(img_path)
+                    # # Calculate shape of the bounding box of card
+                    # x,y,w,h = cv2.boundingRect(np.array(points))
+                    # inter_margins = INTER_MARGIN_RATIO * np.array([w,h])
 
-                    # computer margin for each point
-                    expand_direct_x = find_expand_direct(points_x)
-                    expand_direct_y = find_expand_direct(points_y)
-                    margins_x = inter_margins[0]*expand_direct_x
-                    margins_y = inter_margins[1]*expand_direct_y
+                    # # Shape of image
+                    # x_max = img.shape[1]
+                    # y_max = img.shape[0]
 
-                    # expand to 4 boxes
-                    boxes = []
-                    for i in range(0,4):
-                        box = expand_to_box(points_x[i], points_y[i], x_max, y_max, margins_x[i], margins_y[i], EXTER_INTER_RATIO)
-                        # boxes.append(box)
-                        # gt.append(utils.sort_gt(box))
-                        gt = np.array(box).astype(np.float32)
-                        ground_truth = utils.sort_gt(gt)
-                        self.labels.append(ground_truth)
-                        self.data.append(img_path)
-                    # gt = np.array(gt).astype(np.float32)
-                    # ground_truth = utils.sort_gt(gt)
-                    # self.labels.append(ground_truth)
-                    # self.data.append(img_path)
+                    # # create a array of x,y
+                    # points_x = []
+                    # points_y = []
+                    # for point in points:
+                    #     #point[0] ~ x, point[1] ~ y
+                    #     points_x.append(point[0])
+                    #     points_y.append(point[1])
+                    # points_x = np.array(points_x)
+                    # points_y = np.array(points_y)
+
+                    # # computer margin for each point
+                    # expand_direct_x = find_expand_direct(points_x)
+                    # expand_direct_y = find_expand_direct(points_y)
+                    # margins_x = inter_margins[0]*expand_direct_x
+                    # margins_y = inter_margins[1]*expand_direct_y
+
+                    # # expand to 4 boxes
+                    # boxes = []
+                    # for i in range(0,4):
+                    #     box = expand_to_box(points_x[i], points_y[i], x_max, y_max, margins_x[i], margins_y[i], EXTER_INTER_RATIO)
+                    #     # boxes.append(box)
+                    #     # gt.append(utils.sort_gt(box))
+                    #     gt = np.array(box).astype(np.float32)
+                    #     ground_truth = utils.sort_gt(gt)
+                    #     self.labels.append(ground_truth)
+                    #     self.data.append(img_path)
+                    gt = np.array(gt).astype(np.float32)
+                    ground_truth = utils.sort_gt(gt)
+                    self.labels.append(ground_truth)
+                    self.data.append(img_path)
               
         # for image in os.listdir(directory):
         #     # print (image)
