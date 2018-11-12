@@ -221,7 +221,14 @@ def get_corners(img, gt):
 
             cut_image = img[cords_y[0]:cords_y[1], cords_x[0]:cords_x[1]]
 
-        # cv2.circle(cut_image, gt, 2, (255, 0, 0), 6)
+        # cut_image_copy = cut_image.copy()
+        # cv2.circle(cut_image_copy, gt, 2, (255, 0, 0), 6)
+        # cv2.rectangle(img, (cords_x[0],cords_y[0]), (cords_x[1],cords_y[1]), (255, 0, 0), 2)
+        # cv2.imshow('img', img)
+        # cv2.imshow('cut_image', cut_image_copy)
+        # cv2.waitKey()
+        # cv2.destroyAllWindows()
+
         mah_size = cut_image.shape
         cut_image = cv2.resize(cut_image, (300, 300))
         a = int(gt[0] * 300 / mah_size[1])
