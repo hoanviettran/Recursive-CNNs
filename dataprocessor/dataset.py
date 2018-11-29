@@ -256,10 +256,10 @@ class SmartDocCorner(Dataset):
                 spamreader = csv.reader(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 import ast
                 for row in spamreader:
-                    file_names.append(row[0])
-                    self.data.append(os.path.join(self.directory, row[0]))
-                    test = row[1].replace("array", "")
-                    test = test.replace("|","")
+                    file_names.append(row[1])
+                    self.data.append(os.path.join(self.directory, row[1]))
+                    test = row[2].replace("array", "")
+                    # test = test.replace("|","")
                     self.labels.append((ast.literal_eval(test)))
         self.labels = np.array(self.labels)
 
