@@ -259,6 +259,7 @@ class SmartDocCorner(Dataset):
                     file_names.append(row[0])
                     self.data.append(os.path.join(self.directory, row[0]))
                     test = row[1].replace("array", "")
+                    test = test.replace("|","")
                     self.labels.append((ast.literal_eval(test)))
         self.labels = np.array(self.labels)
 
